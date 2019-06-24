@@ -29,14 +29,6 @@ import java.util.UUID;
  * @explain: 说明
  */
 public class CommonUtils {
-    /**
-     * 高德地图包名
-     */
-    public static final String GAODE_PACKAGE_NAME = "com.autonavi.minimap";
-    /**
-     * 百度地图包名
-     */
-    public static final String BAIDU_PACKAGE_NAME = "com.baidu.BaiduMap";
 
     /**
      * Android是否4.4.4以上，API 19
@@ -228,15 +220,6 @@ public class CommonUtils {
             }
         }
         return false;
-    }
-
-    /**
-     * 判断是否安装了高德地图
-     *
-     * @param context context
-     */
-    public static boolean isInstalledAMap(Context context) {
-        return isAppInstalled(context, GAODE_PACKAGE_NAME);
     }
 
     /**

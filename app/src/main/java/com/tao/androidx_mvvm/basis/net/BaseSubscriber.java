@@ -26,15 +26,7 @@ public abstract class BaseSubscriber<T> extends ResourceSubscriber<T> {
     @Override
     public void onStart() {
         super.onStart();
-        /// TODO 暂时注释
-//        if (!NetworkUtils.hasNetwork(BaseApplication.getInstance())) {
-//            onStartOffline();
-//            if (!isDisposed()){
-//                this.dispose();
-//            }
-//        } else {
-//            onStartRequest();
-//        }
+        //TODO 此处可以判断网络，无网络调用onStartOffline
         onStartRequest();
     }
 

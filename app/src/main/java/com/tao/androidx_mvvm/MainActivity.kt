@@ -4,7 +4,7 @@ import com.tao.androidx_mvvm.basis.activity.BaseMvvmActivity
 import com.tao.androidx_mvvm.databinding.ActivityMainBinding
 import com.tao.androidx_mvvm.viewmodel.ViewModelOfMain
 
-    class MainActivity : BaseMvvmActivity<ViewModelOfMain,ActivityMainBinding>() {
+class MainActivity : BaseMvvmActivity<ViewModelOfMain,ActivityMainBinding>() {
     override fun setViewModel(): ViewModelOfMain {
         return ViewModelOfMain(application)
     }
