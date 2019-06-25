@@ -11,6 +11,7 @@ import com.tao.androidx_mvvm.MainActivity
 import com.tao.androidx_mvvm.R
 import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel
 import com.tao.androidx_mvvm.model.ModelOfFirst
+import com.tao.androidx_mvvm.view.activity.LoginActivity
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,6 +33,7 @@ class ViewModelOfFirst(application: Application) :BaseViewModel<ModelOfFirst>(ap
     val timeKey = "ViewModelOfFirstTimer"
 
     val countdown = MutableLiveData<CharSequence>()
+    private var isClick = false
 
     override fun setModel(): ModelOfFirst {
         return ModelOfFirst()
@@ -67,7 +69,7 @@ class ViewModelOfFirst(application: Application) :BaseViewModel<ModelOfFirst>(ap
                 override fun onNext(t: Long) {
                     countdown.value = getApplication<Application>().getString(R.string.first_jump, t.toString())
                     if (t == 0L){
-                        startIntent.value = Intent(getApplication(),MainActivity::class.java)
+                        startMainActivity()
                     }
                 }
 
@@ -79,7 +81,16 @@ class ViewModelOfFirst(application: Application) :BaseViewModel<ModelOfFirst>(ap
     }
 
     fun onClick(view:View){
-        startIntent.value = Intent(getApplication(),MainActivity::class.java)
+        startMainActivity()
+    }
+
+    fun startMainActivity(){
+        if (!isClick){
+            val intent = Intent(getApplication(),LoginActivity::class.java)
+            intent.putExtra("needFinish",true)
+            startIntent.value = intent
+            isClick = true
+        }
     }
 
 }
