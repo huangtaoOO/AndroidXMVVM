@@ -1,5 +1,6 @@
 package com.tao.androidx_mvvm.basis.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -43,6 +44,17 @@ public abstract class BaseMvvmActivity <VM extends BaseViewModel,VDB extends
     }
 
     protected void setDefaultObservers() {
+        viewModel.startIntent.observe(this, o -> {
+            if ( o instanceof Intent ){
+                boolean needFinish = ((Intent) o).getBooleanExtra("needFinish",false);
+                int requestCode = ((Intent) o).getIntExtra("requestCode",
+                        this.getClass().getCanonicalName()==null?-1:this.getClass().getCanonicalName().length());
+                startActivityForResult((Intent) o,requestCode);
+                if (needFinish){
+                    finish();
+                }
+            }
+        });
     }
 
     /**

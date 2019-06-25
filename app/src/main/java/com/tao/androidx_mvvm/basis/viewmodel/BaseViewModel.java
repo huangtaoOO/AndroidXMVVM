@@ -39,7 +39,7 @@ public abstract class BaseViewModel<M extends BaseModel> extends AndroidViewMode
 
     protected M model;
 
-    protected final MutableLiveData<Intent> startIntent = new MutableLiveData<>();
+    public final MutableLiveData<Intent> startIntent = new MutableLiveData<>();
 
     protected final MutableLiveData<ArrayList<Object>> messageToContext = new MutableLiveData<>();
 

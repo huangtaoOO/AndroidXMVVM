@@ -4,6 +4,10 @@ import com.tao.androidx_mvvm.bean.PublicNumBean;
 import com.tao.androidx_mvvm.bean.ResponseBean;
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
+
 import java.util.ArrayList;
 
 
@@ -23,4 +27,7 @@ public interface UserApi {
      */
     @GET("wxarticle/chapters/json")
     Flowable<ResponseBean<ArrayList<PublicNumBean>>> wxarticle();
+
+    @POST("/user/login")
+    Flowable<ResponseBean> login(@Query("username") String username, @Query("password") String password);
 }
