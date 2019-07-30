@@ -1,7 +1,12 @@
 package com.tao.androidx_mvvm.basis.net;
 
+import android.widget.Toast;
 import androidx.annotation.Nullable;
+import com.tao.androidx_mvvm.basis.BaseApplication;
 import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel;
+import com.tao.androidx_mvvm.net.NetworkClient;
+import com.tao.androidx_mvvm.utils.NetworkUtils;
+import com.tao.androidx_mvvm.utils.ToastUtils;
 import io.reactivex.subscribers.ResourceSubscriber;
 
 /**
@@ -26,8 +31,11 @@ public abstract class BaseSubscriber<T> extends ResourceSubscriber<T> {
     @Override
     public void onStart() {
         super.onStart();
-        //TODO 此处可以判断网络，无网络调用onStartOffline
-        onStartRequest();
+        if (NetworkUtils.hasNetwork(BaseApplication.getInstance())){
+            onStartRequest();
+        }else {
+            onStartOffline();
+        }
     }
 
     @Override
@@ -48,23 +56,21 @@ public abstract class BaseSubscriber<T> extends ResourceSubscriber<T> {
      * 完成时回调
      */
     @Override
-    public abstract void onComplete();
+    public void onComplete(){}
 
     /**
      * 当开始请求时没有网络
      * 可重写复用
      */
     public void onStartOffline(){
-
+        ToastUtils.showTextToast("网络未连接，请检查网络");
     }
 
     /**
      * 当开始请求时时
      * 可重写复用
      */
-    public void onStartRequest(){
-
-    }
+    public void onStartRequest(){}
 
     /**
      * 当成功返回时

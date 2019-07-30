@@ -1,7 +1,11 @@
 package com.tao.androidx_mvvm.net;
 
 import com.tao.androidx_mvvm.Constant;
+import com.tao.androidx_mvvm.basis.BaseApplication;
+import com.tao.androidx_mvvm.net.cookie.CookieJarImpl;
+import com.tao.androidx_mvvm.net.cookie.PersistentCookieStore;
 import com.tao.androidx_mvvm.utils.LogUtil;
+import com.tao.androidx_mvvm.utils.NetworkUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -19,6 +23,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class NetworkClient {
 
+    private static NetworkClient INSTANCE = null;
+
     private static Retrofit retrofit;
     private static final int TIME_OUT = 60*5;
 
@@ -34,6 +40,7 @@ public class NetworkClient {
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
+                .cookieJar(new CookieJarImpl(new PersistentCookieStore(BaseApplication.getInstance())))
                 .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.BASE_URL)
@@ -43,12 +50,8 @@ public class NetworkClient {
                 .build();
     }
 
-    private static class SingletonHolder{
-        private static final NetworkClient INSTANCE = new NetworkClient();
-    }
-
     public static NetworkClient getNetworkClient (){
-        return SingletonHolder.INSTANCE;
+        return INSTANCE == null? INSTANCE = new NetworkClient() : INSTANCE;
     }
 
     /**

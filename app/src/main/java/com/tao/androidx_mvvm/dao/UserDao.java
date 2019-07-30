@@ -1,6 +1,6 @@
 package com.tao.androidx_mvvm.dao;
 
-import com.tao.androidx_mvvm.bean.User;
+import com.tao.androidx_mvvm.bean.UserBean;
 import com.tao.androidx_mvvm.utils.GSonUtils;
 import com.tao.androidx_mvvm.utils.SharedPreferencesUtils;
 
@@ -17,14 +17,14 @@ public class UserDao {
     private final static String SP_KEY_USER = "Androidx_MVVM_User_Info";
 
     /** 缓存已登录帐号用户对象，使用SharedPreferences缓存 */
-    public static void saveUserForm(User user) {
-        String value = GSonUtils.toString(user);
+    public static void saveUserForm(UserBean userBean) {
+        String value = GSonUtils.toString(userBean);
         SharedPreferencesUtils.saveSharedPreferences(SP_KEY_USER, value);
     }
 
     /** 获取已登录帐号用户对象，使用SharedPreferences缓存 */
-    public static User getUserForm() {
+    public static UserBean getUserForm() {
         String accountFormStr = SharedPreferencesUtils.getSharedPreferences().getString(SP_KEY_USER, null);
-        return GSonUtils.parse2Object(accountFormStr, User.class);
+        return GSonUtils.parse2Object(accountFormStr, UserBean.class);
     }
 }
