@@ -15,24 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activity.MainActivity">
-
-        <Button
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.text}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{(view)->viewModel.onClick(view)}"/>
-
-        <ImageView
-            app:layout_constraintTop_toBottomOf="@id/text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:imageUrl="@{viewModel.text}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <com.tao.androidx_mvvm.widget.RingView
+                android:id="@+id/ring"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        android:padding="10dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -23,32 +23,32 @@ import static com.tao.androidx_mvvm.model.ModelOfMain.TEXT;
  */
 public class ViewModelOfMain extends BaseViewModel<ModelOfMain> {
 
-    public final MutableLiveData<String> text = new MutableLiveData<>();
+    //public final MutableLiveData<String> text = new MutableLiveData<>();
 
     public ViewModelOfMain(Application application) {
         super(application);
-        text.setValue("Hello");
+       // text.setValue("Hello");
     }
 
     public void getData(){
-        getData(TEXT, new BaseSubscriber(this) {
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onSuccess(Object o) {
-                LogUtil.i("ViewModelOfMain",o.toString());
-                text.setValue(o.toString());
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                super.onError(t);
-                LogUtil.i("ViewModelOfMain",t.getMessage());
-            }
-        });
+//        getData(TEXT, new BaseSubscriber(this) {
+//            @Override
+//            public void onComplete() {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(Object o) {
+//                LogUtil.i("ViewModelOfMain",o.toString());
+//                text.setValue(o.toString());
+//            }
+//
+//            @Override
+//            public void onError(Throwable t) {
+//                super.onError(t);
+//                LogUtil.i("ViewModelOfMain",t.getMessage());
+//            }
+//        });
     }
 
     @Override
@@ -57,8 +57,8 @@ public class ViewModelOfMain extends BaseViewModel<ModelOfMain> {
     }
 
     public void onClick(View v){
-        if (v.getId() == R.id.text){
-           getData();
-        }
+//        if (v.getId() == R.id.text){
+//           getData();
+//        }
     }
 }

@@ -40,13 +40,14 @@ public class NetworkClient {
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
-                .cookieJar(new CookieJarImpl(new PersistentCookieStore(BaseApplication.getInstance())))
+                //.cookieJar(new CookieJarImpl(new PersistentCookieStore(BaseApplication.getInstance())))
                 .build();
         retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.BASE_URL)
+                //.baseUrl(Constant.BASE_URL)
+                .baseUrl("https://restapi.amap.com/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 

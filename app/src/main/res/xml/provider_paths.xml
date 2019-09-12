@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <paths>
+        <!--Context.getFilesDir() + /path/-->
+        <files-path
+            name="files"
+            path="." />
+        <!--Environment.getExternalStorageDirectory() + /path/-->
+        <external-path
+            name="files"
+            path="." />
+    </paths>
+</resources>

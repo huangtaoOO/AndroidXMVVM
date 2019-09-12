@@ -3,9 +3,13 @@
           package="com.tao.androidx_mvvm">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/> <!-- 获取网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
             android:name=".basis.BaseApplication"
@@ -16,14 +20,28 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name=".view.activity.FirstActivity">
+        </activity>
+        <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".view.activity.LoginActivity"/>
+        <activity android:name=".view.activity.SQLActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".view.activity.LoginActivity"/>
+
+        <!--文件Provider -->
+        <provider
+                android:name=".utils.FilePathProvider"
+                android:authorities="${applicationId}.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>
