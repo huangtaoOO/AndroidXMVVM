@@ -1,11 +1,11 @@
-package com.tao.androidx_mvvm.net.cookie;
-
-import okhttp3.Cookie;
+package cookie;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import okhttp3.Cookie;
 
 /**
  * @author: tao

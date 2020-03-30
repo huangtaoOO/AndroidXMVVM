@@ -1,29 +1,25 @@
-package com.tao.androidx_mvvm.net;
+package com.example.network;
 
-import com.tao.androidx_mvvm.Constant;
-import com.tao.androidx_mvvm.basis.BaseApplication;
-import com.tao.androidx_mvvm.net.cookie.CookieJarImpl;
-import com.tao.androidx_mvvm.net.cookie.PersistentCookieStore;
-import com.tao.androidx_mvvm.utils.LogUtil;
-import com.tao.androidx_mvvm.utils.NetworkUtils;
+import android.util.Log;
+
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author: tao
- * @time: 2019/1/12
+ * @time: 2020/3/30
  * @e-mail: 1462320178@qq.com
  * @version: 1.0
  * @exception: 无
- * @explain: 网络请求客户端
+ * @explain: 说明
  */
 public class NetworkClient {
 
-    private static NetworkClient INSTANCE = null;
+    private volatile static NetworkClient INSTANCE = null;
 
     private static Retrofit retrofit;
     private static final int TIME_OUT = 60*5;
@@ -32,7 +28,7 @@ public class NetworkClient {
      * 私有化构造方法
      */
     private NetworkClient(){
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> LogUtil.i("HttpLog",message));
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.i("HttpLog",message));
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient()
@@ -52,7 +48,15 @@ public class NetworkClient {
     }
 
     public static NetworkClient getNetworkClient (){
-        return INSTANCE == null? INSTANCE = new NetworkClient() : INSTANCE;
+        if (INSTANCE == null){
+            synchronized (NetworkClient.class){
+                if (INSTANCE == null){
+                    INSTANCE = new NetworkClient();
+                    return INSTANCE;
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     /**
@@ -66,3 +70,4 @@ public class NetworkClient {
     }
 
 }
+

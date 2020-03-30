@@ -45,19 +45,11 @@ dependencies {
     // Architecture Components
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01'
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha01"
-    //rxjava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    //okhttp
-    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
-    //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     //glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.qmuiteam:qmui:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    implementation project(':network')
 }

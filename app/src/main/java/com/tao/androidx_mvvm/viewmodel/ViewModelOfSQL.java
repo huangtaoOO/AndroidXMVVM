@@ -2,10 +2,11 @@ package com.tao.androidx_mvvm.viewmodel;
 
 import android.app.Application;
 import android.content.Context;
-import android.nfc.FormatException;
 import android.util.Log;
 import android.view.View;
 import androidx.lifecycle.MutableLiveData;
+
+import com.example.network.NetworkClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel;
@@ -13,7 +14,6 @@ import com.tao.androidx_mvvm.bean.DistrictsBean;
 import com.tao.androidx_mvvm.bean.RResponse;
 import com.tao.androidx_mvvm.bean.RegionBean;
 import com.tao.androidx_mvvm.model.ModelOfFirst;
-import com.tao.androidx_mvvm.net.NetworkClient;
 import com.tao.androidx_mvvm.net.api.UserApi;
 import com.tao.androidx_mvvm.utils.FilePathProvider;
 import io.reactivex.Observable;
@@ -22,7 +22,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
-
 import java.io.*;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;

@@ -1,11 +1,10 @@
-package com.tao.androidx_mvvm.net.cookie;
+package cookie;
+
+import java.util.List;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
-import okhttp3.internal.annotations.EverythingIsNonNull;
-
-import java.util.List;
 
 /**
  * @author: tao
