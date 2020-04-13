@@ -42,11 +42,6 @@ public abstract class BaseMvvmActivity <VM extends BaseViewModel,VDB extends
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!BaseViewModel.class.isAssignableFrom(setViewModel())){
-            Log.e("BaseMvvmActivity","setViewModel() 的返回值不满足 BaseViewModel ") ;
-            return;
-        }
-        viewModel = ViewModelProviders.of(this).get(setViewModel());
         doBeforeBinding();
         onBinding();
         initUI();
@@ -76,6 +71,11 @@ public abstract class BaseMvvmActivity <VM extends BaseViewModel,VDB extends
     protected void doBeforeBinding(){}
 
     protected void onBinding(){
+        if (!BaseViewModel.class.isAssignableFrom(setViewModel())){
+            Log.e("BaseMvvmActivity","setViewModel() 的返回值不满足 BaseViewModel ") ;
+            throw new ClassCastException("setViewModel() 的返回值不满足 BaseViewModel ");
+        }
+        viewModel = ViewModelProviders.of(this).get(setViewModel());
         binding = DataBindingUtil.setContentView(this, getLayoutId());
         binding.setLifecycleOwner(this);
         binding.setVariable(BR.viewModel,viewModel);
