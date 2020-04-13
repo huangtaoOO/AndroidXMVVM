@@ -1,10 +1,8 @@
 package com.tao.androidx_mvvm.basis.net;
 
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.tao.androidx_mvvm.basis.BaseApplication;
 import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel;
-import com.tao.androidx_mvvm.net.NetworkClient;
 import com.tao.androidx_mvvm.utils.NetworkUtils;
 import com.tao.androidx_mvvm.utils.ToastUtils;
 import io.reactivex.subscribers.ResourceSubscriber;

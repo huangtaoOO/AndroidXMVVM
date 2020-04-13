@@ -2,16 +2,22 @@ package com.tao.androidx_mvvm.basis.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.tao.androidx_mvvm.BR;
 import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel;
 import com.tao.androidx_mvvm.bean.MessageEvens;
 import com.tao.androidx_mvvm.utils.LogUtil;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.SoftReference;
 import java.util.ArrayDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -36,7 +42,11 @@ public abstract class BaseMvvmActivity <VM extends BaseViewModel,VDB extends
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = setViewModel();
+        if (!BaseViewModel.class.isAssignableFrom(setViewModel())){
+            Log.e("BaseMvvmActivity","setViewModel() 的返回值不满足 BaseViewModel ") ;
+            return;
+        }
+        viewModel = ViewModelProviders.of(this).get(setViewModel());
         doBeforeBinding();
         onBinding();
         initUI();
@@ -75,7 +85,8 @@ public abstract class BaseMvvmActivity <VM extends BaseViewModel,VDB extends
      * 设置ViewModel
      * @return viewModel
      */
-    protected abstract VM setViewModel();
+    @NotNull
+    protected abstract Class<VM> setViewModel();
 
     /**
      * 初始化ui的方法

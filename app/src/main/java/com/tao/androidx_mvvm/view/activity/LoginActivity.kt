@@ -18,8 +18,8 @@ class LoginActivity : BaseMvvmActivity<ViewModelOfLogin, ActivityLoginBinding>()
         return R.layout.activity_login
     }
 
-    override fun setViewModel(): ViewModelOfLogin {
-        return ViewModelOfLogin(application)
+    override fun setViewModel(): Class<ViewModelOfLogin> {
+        return ViewModelOfLogin::class.java
     }
 
     override fun initUI() {

@@ -1,10 +1,10 @@
 package com.tao.androidx_mvvm.model;
 
+import com.example.network.NetworkClient;
 import com.tao.androidx_mvvm.basis.model.BaseModel;
 import com.tao.androidx_mvvm.basis.net.BaseSubscriber;
 import com.tao.androidx_mvvm.bean.UserBean;
 import com.tao.androidx_mvvm.dao.UserDao;
-import com.tao.androidx_mvvm.net.NetworkClient;
 import com.tao.androidx_mvvm.net.api.UserApi;
 import com.tao.androidx_mvvm.utils.LogUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;

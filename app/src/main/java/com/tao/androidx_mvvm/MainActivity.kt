@@ -3,6 +3,7 @@ package com.tao.androidx_mvvm
 import com.tao.androidx_mvvm.basis.activity.BaseMvvmActivity
 import com.tao.androidx_mvvm.databinding.ActivityMainBinding
 import com.tao.androidx_mvvm.viewmodel.ViewModelOfMain
+import java.lang.Class as Class1
 
 class MainActivity : BaseMvvmActivity<ViewModelOfMain,ActivityMainBinding>() {
 
@@ -17,8 +18,8 @@ class MainActivity : BaseMvvmActivity<ViewModelOfMain,ActivityMainBinding>() {
     val text4 = ", '"
     val text5 = ", 86);"
 
-    override fun setViewModel(): ViewModelOfMain {
-        return ViewModelOfMain(application)
+    override fun setViewModel(): java.lang.Class<ViewModelOfMain> {
+        return ViewModelOfMain::class.java
     }
 
     override fun initUI() {

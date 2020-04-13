@@ -10,8 +10,8 @@ class FirstActivity : BaseMvvmActivity<ViewModelOfFirst, ActivityFirstBinding>()
        viewModel.startCountDown()
     }
 
-    override fun setViewModel(): ViewModelOfFirst {
-        return ViewModelOfFirst(application)
+    override fun setViewModel(): Class<ViewModelOfFirst> {
+        return ViewModelOfFirst::class.java
     }
 
     override fun getLayoutId(): Int {
