@@ -1,11 +1,11 @@
 package com.tao.androidx_mvvm.view.activity
 
+import com.example.base.activity.BaseMActivity
 import com.tao.androidx_mvvm.R
-import com.tao.androidx_mvvm.basis.activity.BaseMvvmActivity
 import com.tao.androidx_mvvm.databinding.ActivitySqlBinding
 import com.tao.androidx_mvvm.viewmodel.ViewModelOfSQL
 
-class SQLActivity : BaseMvvmActivity<ViewModelOfSQL, ActivitySqlBinding>() {
+class SQLActivity : BaseMActivity<ViewModelOfSQL, ActivitySqlBinding>() {
 
     override fun initUI() {
         viewModel.setContext(this)

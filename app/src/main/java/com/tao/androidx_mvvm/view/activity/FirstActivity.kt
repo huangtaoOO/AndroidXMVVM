@@ -1,11 +1,11 @@
 package com.tao.androidx_mvvm.view.activity
 
+import com.example.base.activity.BaseMActivity
 import com.tao.androidx_mvvm.R
-import com.tao.androidx_mvvm.basis.activity.BaseMvvmActivity
 import com.tao.androidx_mvvm.databinding.ActivityFirstBinding
 import com.tao.androidx_mvvm.viewmodel.ViewModelOfFirst
 
-class FirstActivity : BaseMvvmActivity<ViewModelOfFirst, ActivityFirstBinding>() {
+class FirstActivity : BaseMActivity<ViewModelOfFirst, ActivityFirstBinding>() {
     override fun initUI() {
        viewModel.startCountDown()
     }

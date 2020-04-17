@@ -2,23 +2,17 @@ package com.tao.androidx_mvvm.viewmodel
 
 import android.app.Application
 import android.content.Intent
-import android.util.Log
 import android.view.View
-import androidx.annotation.MainThread
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.tao.androidx_mvvm.MainActivity
+import com.example.base.viewmodel.BaseViewModel
 import com.tao.androidx_mvvm.R
-import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel
 import com.tao.androidx_mvvm.model.ModelOfFirst
 import com.tao.androidx_mvvm.view.activity.LoginActivity
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -29,7 +23,7 @@ import java.util.concurrent.TimeUnit
  * @exception: 无
  * @explain: 说明
  */
-class ViewModelOfFirst(application: Application) :BaseViewModel<ModelOfFirst>(application){
+class ViewModelOfFirst(application: Application) : BaseViewModel<ModelOfFirst>(application){
     val timeKey = "ViewModelOfFirstTimer"
 
     val countdown = MutableLiveData<CharSequence>()

@@ -4,14 +4,14 @@ import android.app.Application
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.example.base.net.BaseSubscriber
+import com.example.base.utils.ToastUtils
+import com.example.base.viewmodel.BaseViewModel
 import com.tao.androidx_mvvm.MainActivity
-import com.tao.androidx_mvvm.basis.net.BaseSubscriber
-import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel
 import com.tao.androidx_mvvm.bean.ResponseBean
 import com.tao.androidx_mvvm.bean.UserBean
 import com.tao.androidx_mvvm.model.ModelOfLogin
 import com.tao.androidx_mvvm.model.ModelOfLogin.LOGIN_CODE
-import com.tao.androidx_mvvm.utils.ToastUtils
 
 /**
  * @author: tao
@@ -21,7 +21,7 @@ import com.tao.androidx_mvvm.utils.ToastUtils
  * @exception: 无
  * @explain: 说明
  */
-class ViewModelOfLogin(application: Application) :BaseViewModel<ModelOfLogin>(application) {
+class ViewModelOfLogin(application: Application) : BaseViewModel<ModelOfLogin>(application) {
 
     val edName = MutableLiveData<CharSequence>()
 

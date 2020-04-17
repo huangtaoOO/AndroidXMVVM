@@ -4,28 +4,36 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.base.utils.FilePathProvider;
+import com.example.base.viewmodel.BaseViewModel;
 import com.example.network.NetworkClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel;
 import com.tao.androidx_mvvm.bean.DistrictsBean;
 import com.tao.androidx_mvvm.bean.RResponse;
 import com.tao.androidx_mvvm.bean.RegionBean;
 import com.tao.androidx_mvvm.model.ModelOfFirst;
 import com.tao.androidx_mvvm.net.api.UserApi;
-import com.tao.androidx_mvvm.utils.FilePathProvider;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
-import java.io.*;
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author: tao

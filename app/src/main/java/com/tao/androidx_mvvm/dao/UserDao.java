@@ -1,8 +1,8 @@
 package com.tao.androidx_mvvm.dao;
 
+import com.example.base.utils.GSonUtils;
+import com.example.base.utils.SharedPreferencesUtils;
 import com.tao.androidx_mvvm.bean.UserBean;
-import com.tao.androidx_mvvm.utils.GSonUtils;
-import com.tao.androidx_mvvm.utils.SharedPreferencesUtils;
 
 /**
  * @author: tao

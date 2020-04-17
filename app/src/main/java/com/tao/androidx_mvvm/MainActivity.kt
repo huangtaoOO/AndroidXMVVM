@@ -1,11 +1,10 @@
 package com.tao.androidx_mvvm
 
-import com.tao.androidx_mvvm.basis.activity.BaseMvvmActivity
+import com.example.base.activity.BaseMActivity
 import com.tao.androidx_mvvm.databinding.ActivityMainBinding
 import com.tao.androidx_mvvm.viewmodel.ViewModelOfMain
-import java.lang.Class as Class1
 
-class MainActivity : BaseMvvmActivity<ViewModelOfMain,ActivityMainBinding>() {
+class MainActivity : BaseMActivity<ViewModelOfMain, ActivityMainBinding>() {
 
     /****
      *

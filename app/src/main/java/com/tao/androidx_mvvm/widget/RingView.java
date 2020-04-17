@@ -11,11 +11,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
 import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
+import com.example.base.utils.DimenUtil;
 import com.tao.androidx_mvvm.R;
-import com.tao.androidx_mvvm.utils.DimenUtil;
 
 import java.lang.ref.SoftReference;
 import java.util.List;

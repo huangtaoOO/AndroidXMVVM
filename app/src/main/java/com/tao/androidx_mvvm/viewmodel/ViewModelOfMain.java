@@ -2,15 +2,10 @@ package com.tao.androidx_mvvm.viewmodel;
 
 import android.app.Application;
 import android.view.View;
-import androidx.lifecycle.MutableLiveData;
-import com.tao.androidx_mvvm.R;
-import com.tao.androidx_mvvm.basis.net.BaseSubscriber;
-import com.tao.androidx_mvvm.basis.net.NetworkCallBack;
-import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel;
-import com.tao.androidx_mvvm.model.ModelOfMain;
-import com.tao.androidx_mvvm.utils.LogUtil;
 
-import static com.tao.androidx_mvvm.model.ModelOfMain.TEXT;
+import com.example.base.viewmodel.BaseViewModel;
+import com.tao.androidx_mvvm.model.ModelOfMain;
+
 
 
 /**
