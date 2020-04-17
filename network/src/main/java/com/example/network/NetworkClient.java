@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -27,7 +28,7 @@ public class NetworkClient {
     /**
      * 私有化构造方法
      */
-    private NetworkClient(){
+    private NetworkClient(String ... url){
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.i("HttpLog",message));
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -38,25 +39,32 @@ public class NetworkClient {
                 .addInterceptor(loggingInterceptor)
                 //.cookieJar(new CookieJarImpl(new PersistentCookieStore(BaseApplication.getInstance())))
                 .build();
-        retrofit = new Retrofit.Builder()
-                //.baseUrl(Constant.BASE_URL)
-                .baseUrl("https://restapi.amap.com/")
-                .client(okHttpClient)
+        Retrofit.Builder builder = new Retrofit.Builder();
+        if (url == null || url.length < 1){
+            builder.baseUrl("https://www.wanandroid.com/");
+        }else {
+            builder.baseUrl(url[0]);
+        }
+        retrofit = builder.client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
-                //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
-    public static NetworkClient getNetworkClient (){
+    public static NetworkClient getNetworkClient (String ... url){
         if (INSTANCE == null){
             synchronized (NetworkClient.class){
                 if (INSTANCE == null){
-                    INSTANCE = new NetworkClient();
+                    INSTANCE = new NetworkClient(url);
                     return INSTANCE;
                 }
             }
         }
         return INSTANCE;
+    }
+
+    public static void resetNullClient(){
+        INSTANCE = null;
     }
 
     /**
