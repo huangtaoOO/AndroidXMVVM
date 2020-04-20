@@ -11,7 +11,6 @@ import com.tao.androidx_mvvm.view.activity.LoginActivity
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -39,19 +38,14 @@ class ViewModelOfFirst(application: Application) : BaseViewModel<ModelOfFirst>(a
         //参数二：隔多长时间发一次
         //参数三：计时的单位，是秒还是毫秒
         val time = 3
-        Observable.interval(
-            0,1,TimeUnit.SECONDS)
+        Observable.interval(0,1,TimeUnit.SECONDS)
             .take((time+1).toLong())
-            .map(object: Function<Long,Long> {
-                override fun apply(t: Long): Long {
-                    return time - t
-                }
-            })
-                //观察者 回调的线程
+            .map { t -> time - t }
+            //观察者 回调的线程
             .observeOn(AndroidSchedulers.mainThread())
                 //被观察者 执行耗时操作的线程
             .subscribeOn(Schedulers.newThread())
-            .subscribe(object: io.reactivex.Observer<Long?> {
+            .subscribe(object: io.reactivex.Observer<Long> {
                 override fun onComplete() {
                     removeDisposable(timeKey)
                 }
