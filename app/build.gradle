@@ -6,11 +6,11 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.tao.androidx_mvvm"
         minSdkVersion 25
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -35,13 +35,15 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0-beta01'
-    implementation 'androidx.core:core-ktx:1.3.0-beta01'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.qmuiteam:qmui:1.2.0'
+    implementation "androidx.appcompat:appcompat:$rootProject.appcompatVersion"
+    implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
+    implementation "androidx.legacy:legacy-support-v4:$rootProject.v4Veersion"
+
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation "androidx.test:runner:$rootProject.runnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
+
+    implementation "com.qmuiteam:qmui:$rootProject.qmuiVersion"
     implementation project(':base')
 }
