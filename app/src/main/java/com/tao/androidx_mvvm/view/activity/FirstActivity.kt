@@ -7,7 +7,7 @@ import com.tao.androidx_mvvm.viewmodel.ViewModelOfFirst
 
 class FirstActivity : BaseMActivity<ViewModelOfFirst, ActivityFirstBinding>() {
     override fun initUI() {
-       viewModel.startCountDown()
+        viewModel.startCountDown()
     }
 
     override fun setViewModel(): Class<ViewModelOfFirst> {
