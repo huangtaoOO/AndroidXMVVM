@@ -150,4 +150,10 @@ public abstract class BaseMActivity<VM extends BaseViewModel,VDB extends
     public int getTag(){
         return hashCode();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewModel.unsubscribe();
+    }
 }

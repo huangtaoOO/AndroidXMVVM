@@ -43,12 +43,25 @@ public abstract class BaseMFragment<VM extends BaseViewModel,VDB extends ViewDat
         return binding.getRoot();
     }
 
-    protected abstract void initUI(LayoutInflater inflater, ViewGroup container);
+    /**
+     * 初始化控件
+     */
+    protected abstract void initUI();
 
+    /**
+     * 返回控件的布局ID
+     * @return id
+     */
     protected abstract int getLayoutId();
 
+    /**
+     * 绑定之前执行
+     */
     protected void doBeforeBinding(){}
 
+    /**
+     * 设置默认的观察者
+     */
     protected void setDefaultObservers(){
 
     }
@@ -59,7 +72,7 @@ public abstract class BaseMFragment<VM extends BaseViewModel,VDB extends ViewDat
                 getLayoutId(),container,false);
         binding.setLifecycleOwner(this);
         binding.setVariable(BR.viewModel,viewModel);
-        initUI(inflater,container);
+        initUI();
     }
 
     @Override
@@ -67,5 +80,15 @@ public abstract class BaseMFragment<VM extends BaseViewModel,VDB extends ViewDat
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * 返回对应的viewModel类型
+     * @return class
+     */
     protected abstract Class<VM> setViewModel();
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.unsubscribe();
+    }
 }
