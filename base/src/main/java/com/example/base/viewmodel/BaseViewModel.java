@@ -17,6 +17,7 @@ import com.example.base.net.BaseSubscriber;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -100,7 +101,7 @@ public abstract class BaseViewModel<M extends BaseModel> extends AndroidViewMode
     public void removeDisposable(@NotNull String requestKey) {
         if (null != mCompositeDisposable && null != mDisposableMap
                 && mDisposableMap.containsKey(requestKey)) {
-            mCompositeDisposable.remove(mDisposableMap.get(requestKey));
+            mCompositeDisposable.remove(Objects.requireNonNull(mDisposableMap.get(requestKey)));
             mDisposableMap.remove(requestKey);
         }
     }
