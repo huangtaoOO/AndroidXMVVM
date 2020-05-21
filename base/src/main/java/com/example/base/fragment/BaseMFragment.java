@@ -89,6 +89,5 @@ public abstract class BaseMFragment<VM extends BaseViewModel,VDB extends ViewDat
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewModel.unsubscribe();
     }
 }

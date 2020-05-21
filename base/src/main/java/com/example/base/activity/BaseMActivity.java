@@ -154,6 +154,5 @@ public abstract class BaseMActivity<VM extends BaseViewModel,VDB extends
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        viewModel.unsubscribe();
     }
 }
