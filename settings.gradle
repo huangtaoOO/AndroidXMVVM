@@ -1,2 +1,3 @@
+include ':common'
 include ':app', ':network'
 include ':base'
