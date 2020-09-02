@@ -1,69 +1,77 @@
-/*
- * Copyright 2018-present KunMinX
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.common.view;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.inputmethod.InputMethodManager;
-
-import androidx.annotation.Nullable;
-
-import com.example.common.network.NetworkStateManager;
-import com.example.common.utils.AdaptScreenUtils;
-import com.example.common.utils.BarUtils;
-import com.example.common.utils.ScreenUtils;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import com.example.common.utils.LogUtil;
+import com.example.common.bean.MessageEvens;
+import java.lang.ref.SoftReference;
+import java.util.ArrayDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Create by KunMinX at 19/8/1
+ * @Author: tao
+ * @ClassName: BaseActivity
+ * @Time: 2020/8/28 23:40
+ * @E-mail: 1462320178@qq.com
+ * @version: 1.0
+ * @Description: java类作用描述
+ * @Exception: 无
  */
-public abstract class BaseActivity extends DataBindingActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    private AtomicBoolean needHandler = new AtomicBoolean(false);
+    private SoftReference<ArrayDeque<Object>> queueReference;
 
-        BarUtils.setStatusBarColor(this, Color.TRANSPARENT);
-        BarUtils.setStatusBarLightMode(this, true);
-
-        super.onCreate(savedInstanceState);
-
-        getLifecycle().addObserver(NetworkStateManager.getInstance());
-
-        //TODO tip: DataBinding 严格模式（详见 DataBindingActivity - - - - - ）：
-        // 将 DataBinding 实例限制于 base 页面中，默认不向子类暴露，
-        // 通过这样的方式，来彻底解决 视图调用的一致性问题，
-        // 如此，视图刷新的安全性将和基于函数式编程的 Jetpack Compose 持平。
-
-        // 如果这样说还不理解的话，详见 https://xiaozhuanlan.com/topic/9816742350 和 https://xiaozhuanlan.com/topic/2356748910
+    public int getTag(){
+        return hashCode();
     }
 
-    @Override
-    public Resources getResources() {
-        if (ScreenUtils.isPortrait()) {
-            return AdaptScreenUtils.adaptWidth(super.getResources(), 360);
-        } else {
-            return AdaptScreenUtils.adaptHeight(super.getResources(), 640);
+
+    public synchronized void dispatchMessage(Object object){
+        if (object instanceof MessageEvens){
+            if (((MessageEvens<?>) object).getType() == MessageEvens.PROMPTLY){
+                handlerMsg(((MessageEvens<?>) object).getData());
+            }else {
+                if (getLifecycle().getCurrentState() == Lifecycle.State.RESUMED){
+                    handlerMsg(object);
+                }else {
+                    if (queueReference==null){
+                        queueReference = new SoftReference<>(new ArrayDeque<>(4));
+                    }
+                    if (queueReference.get()!=null){
+                        queueReference.get().offer(object);
+                    }
+                    needHandler.set(true);
+                }
+            }
         }
     }
 
-    protected void toggleSoftInput() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (needHandler.get()){
+            if (queueReference.get()!=null){
+                while (true){
+                    Object o = queueReference.get().poll();
+                    if (o == null){
+                        needHandler.set(false);
+                        break;
+                    } else {
+                        handlerMsg(o);
+                    }
+                }
+            }else {
+                needHandler.set(false);
+                LogUtil.e("BaseActivity","可能存在信息丢失");
+            }
+        }
     }
+
+    /**
+     * 处理全局传递进来的msg
+     * @param object MessageEvens
+     */
+    public abstract void handlerMsg(Object object);
+
 }

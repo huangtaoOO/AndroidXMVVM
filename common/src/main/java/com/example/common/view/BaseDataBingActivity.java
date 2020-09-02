@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModel;
@@ -20,94 +20,156 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.common.BaseApplication;
 import com.example.common.R;
+import com.example.common.bean.ActionIntentBean;
+import com.example.common.bean.MessageEvens;
+import com.example.common.viewmodel.BaseViewModel;
+
+import kotlin.jvm.internal.PropertyReference0Impl;
 
 /**
- * @author: tao
- * @time: 2020/8/21
- * @e-mail: 1462320178@qq.com
+ * @Author: tao
+ * @ClassName: BaseDatabingActivity
+ * @Time: 2020/8/29 8:44
+ * @E-mail: 1462320178@qq.com
  * @version: 1.0
- * @exception: 无
- * @explain: 说明
+ * @Description: java类作用描述
+ * @Exception: 无
  */
-public abstract class DataBindingActivity extends AppCompatActivity {
+public abstract class BaseDataBingActivity<VDB extends ViewDataBinding , VM extends BaseViewModel> extends BaseActivity{
 
     private ViewModelProvider mActivityProvider;
     private ViewModelProvider.Factory mFactory;
-    private ViewDataBinding mBinding;
-    private TextView mTvStrictModeTip;
+    protected VDB mBinding;
+    protected VM mViewModel;
 
-    protected abstract void initViewModel();
+    protected abstract Class<VM> initViewModel();
 
-    protected abstract DataBindingConfig getDataBindingConfig();
-
+    protected DataBindingConfig getDataBindingConfig(){
+        return new DataBindingConfig(getLayoutId(),vmVariableId(),mViewModel = getActivityViewModel(initViewModel()));
+    }
 
     /**
-     * TODO tip: 警惕使用。非必要情况下，尽可能不在子类中拿到 binding 实例乃至获取 view 实例。使用即埋下隐患。
-     * 目前的方案是在 debug 模式下，对获取实例的情况给予提示。
-     * <p>
-     * 如果这样说还不理解的话，详见 https://xiaozhuanlan.com/topic/9816742350 和 https://xiaozhuanlan.com/topic/2356748910
-     *
-     * @return binding
+     * 获取布局文件id
+     * @return id
      */
-    protected ViewDataBinding getBinding() {
-        if (isDebug() && mBinding != null) {
-            if (mTvStrictModeTip == null) {
-                mTvStrictModeTip = new TextView(getApplicationContext());
-                mTvStrictModeTip.setAlpha(0.5f);
-                mTvStrictModeTip.setTextSize(16);
-                mTvStrictModeTip.setBackgroundColor(Color.WHITE);
-                mTvStrictModeTip.setText(R.string.debug_activity_databinding_warning);
-                ((ViewGroup) mBinding.getRoot()).addView(mTvStrictModeTip);
-            }
-        }
-        return mBinding;
-    }
+    protected abstract @LayoutRes int getLayoutId();
+
+    /**
+     * 获取DataBing绑定的变量名
+     * @return BR。viewModel
+     */
+    protected abstract int vmVariableId();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        doBeforeBinding();
+        onBinding();
+        initUI();
+        setDefaultObservers();
+    }
 
+    /**
+     * 设置观察者
+     */
+    protected void setDefaultObservers(){
+        mViewModel.getActionIntent().observe(this,it -> {
+            if (it == null) return;
+            handleActionForViewModel(it);
+        });
+        mViewModel.getMessageToContext().observe(this,it -> {
+            if (it == null) return;
+            handleMessageForViewModel(it);
+        });
+    }
+
+    /**
+     * 处理来自ViewModel的消息
+     * 一般是界面变化啥的
+     * @param it 消息
+     */
+    protected abstract void handleMessageForViewModel(@NonNull MessageEvens<?> it);
+
+    /**
+     * 处理来自ViewModel的动作
+     * 一般是启动界面啥的
+     * @param it 消息
+     */
+    protected abstract void handleActionForViewModel(@NonNull ActionIntentBean it);
+
+    /**
+     * 初始化UI
+     */
+    protected abstract void initUI();
+
+    /**
+     * 绑定界面
+     */
+    protected void onBinding(){
         initViewModel();
         DataBindingConfig dataBindingConfig = getDataBindingConfig();
-
-        //TODO tip: DataBinding 严格模式：
-        // 将 DataBinding 实例限制于 base 页面中，默认不向子类暴露，
-        // 通过这样的方式，来彻底解决 视图调用的一致性问题，
-        // 如此，视图刷新的安全性将和基于函数式编程的 Jetpack Compose 持平。
-
-        // 如果这样说还不理解的话，详见 https://xiaozhuanlan.com/topic/9816742350 和 https://xiaozhuanlan.com/topic/2356748910
-
-        ViewDataBinding binding = DataBindingUtil.setContentView(this, dataBindingConfig.getLayout());
+        VDB binding = DataBindingUtil.setContentView(this, dataBindingConfig.getLayout());
         binding.setLifecycleOwner(this);
         binding.setVariable(dataBindingConfig.getVmVariableId(), dataBindingConfig.getStateViewModel());
-        SparseArray bindingParams = dataBindingConfig.getBindingParams();
+        SparseArray<?> bindingParams = dataBindingConfig.getBindingParams();
         for (int i = 0, length = bindingParams.size(); i < length; i++) {
             binding.setVariable(bindingParams.keyAt(i), bindingParams.valueAt(i));
         }
         mBinding = binding;
     }
 
+    /**
+     * 绑定BataBing之前
+     */
+    protected void doBeforeBinding() { }
+
+    /**
+     * 是否是debug状态
+     * @return debug 状态
+     */
     public boolean isDebug() {
         return getApplicationContext().getApplicationInfo() != null &&
                 (getApplicationContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
     }
 
+    /**
+     * 显示长时间Toast
+     * @param text 文本
+     */
     protected void showLongToast(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * 显示短时间Toast
+     * @param text 文本
+     */
     protected void showShortToast(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 显示长时间Toast
+     * @param stringRes 资源id
+     */
     protected void showLongToast(int stringRes) {
         showLongToast(getApplicationContext().getString(stringRes));
     }
 
+    /**
+     * 显示短时间Toast
+     * @param stringRes 资源id
+     */
     protected void showShortToast(int stringRes) {
         showShortToast(getApplicationContext().getString(stringRes));
     }
 
+    /**
+     * 获取activity的viewModel
+     * @param modelClass class
+     * @param <T> viewModel的泛型
+     * @return viewModel
+     */
     protected <T extends ViewModel> T getActivityViewModel(@NonNull Class<T> modelClass) {
         if (mActivityProvider == null) {
             mActivityProvider = new ViewModelProvider(this,getAppFactory(this));

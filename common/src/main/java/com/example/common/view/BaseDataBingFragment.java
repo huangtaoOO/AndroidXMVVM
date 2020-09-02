@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,16 +27,20 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.common.BaseApplication;
 import com.example.common.R;
+import com.example.common.bean.ActionIntentBean;
+import com.example.common.bean.MessageEvens;
+import com.example.common.viewmodel.BaseViewModel;
 
 /**
- * @author: tao
- * @time: 2020/8/21
- * @e-mail: 1462320178@qq.com
+ * @Author: tao
+ * @ClassName: BaseFragment
+ * @Time: 2020/8/29 9:30
+ * @E-mail: 1462320178@qq.com
  * @version: 1.0
- * @exception: 无
- * @explain: 说明
+ * @Description: java类作用描述
+ * @Exception: 无
  */
-public abstract class DataBindingFragment extends Fragment {
+public abstract class BaseDataBingFragment<VDB extends ViewDataBinding,VM extends BaseViewModel> extends Fragment {
 
     private static final Handler HANDLER = new Handler();
     protected AppCompatActivity mActivity;
@@ -43,8 +48,8 @@ public abstract class DataBindingFragment extends Fragment {
     private ViewModelProvider mFragmentProvider;
     private ViewModelProvider mActivityProvider;
     private ViewModelProvider.Factory mFactory;
-    private ViewDataBinding mBinding;
-    private TextView mTvStrictModeTip;
+    protected VDB mBinding;
+    protected VM mViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -52,61 +57,86 @@ public abstract class DataBindingFragment extends Fragment {
         mActivity = (AppCompatActivity) context;
     }
 
-    protected abstract void initViewModel();
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initViewModel();
     }
 
-    protected abstract DataBindingConfig getDataBindingConfig();
+    /**
+     * 获取布局文件
+     * @return 布局文件ID
+     */
+    protected abstract @LayoutRes int getLayoutId();
 
     /**
-     * TODO tip: 警惕使用。非必要情况下，尽可能不在子类中拿到 binding 实例乃至获取 view 实例。使用即埋下隐患。
-     * 目前的方案是在 debug 模式下，对获取实例的情况给予提示。
-     * <p>
-     * 如果这样说还不理解的话，详见 https://xiaozhuanlan.com/topic/9816742350 和 https://xiaozhuanlan.com/topic/2356748910
-     *
-     * @return binding
+     * 获取viewModel的变量名
+     * @return BR.viewModel
      */
-    protected ViewDataBinding getBinding() {
-        if (isDebug() && mBinding != null) {
-            if (mTvStrictModeTip == null) {
-                mTvStrictModeTip = new TextView(getContext());
-                mTvStrictModeTip.setAlpha(0.5f);
-                mTvStrictModeTip.setTextSize(16);
-                mTvStrictModeTip.setBackgroundColor(Color.WHITE);
-                mTvStrictModeTip.setText(R.string.debug_fragment_databinding_warning);
-                ((ViewGroup) mBinding.getRoot()).addView(mTvStrictModeTip);
-            }
+    protected abstract int vmVariableId();
+
+    /**
+     * 获取ViewModel的Class
+     * @return class
+     */
+    protected abstract Class<VM> initViewModel();
+
+    /**
+     * 组装成DataBindingConfig
+     * @return DataBindingConfig
+     */
+    protected DataBindingConfig getDataBindingConfig(){
+        return new DataBindingConfig(getLayoutId(),vmVariableId(),mViewModel = getFragmentViewModel(initViewModel()));
+    }
+
+    protected void onBinding(LayoutInflater inflater, ViewGroup container){
+        DataBindingConfig dataBindingConfig = getDataBindingConfig();
+        VDB binding = DataBindingUtil.inflate(inflater, dataBindingConfig.getLayout(), container, false);
+        binding.setLifecycleOwner(this);
+        binding.setVariable(dataBindingConfig.getVmVariableId(), dataBindingConfig.getStateViewModel());
+        SparseArray<?> bindingParams = dataBindingConfig.getBindingParams();
+        for (int i = 0, length = bindingParams.size(); i < length; i++) {
+            binding.setVariable(bindingParams.keyAt(i), bindingParams.valueAt(i));
         }
-        return mBinding;
+        mBinding = binding;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        doBeforeBinding();
+        onBinding(inflater,container);
+        return mBinding.getRoot();
+    }
 
-        DataBindingConfig dataBindingConfig = getDataBindingConfig();
 
-        //TODO tip: DataBinding 严格模式：
-        // 将 DataBinding 实例限制于 base 页面中，默认不向子类暴露，
-        // 通过这样的方式，来彻底解决 视图调用的一致性问题，
-        // 如此，视图刷新的安全性将和基于函数式编程的 Jetpack Compose 持平。
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initUI();
+        setDefaultObservers();
+    }
 
-        // 如果这样说还不理解的话，详见 https://xiaozhuanlan.com/topic/9816742350 和 https://xiaozhuanlan.com/topic/2356748910
+    protected void setDefaultObservers(){
+        mViewModel.getActionIntent().observe(getViewLifecycleOwner(),it -> {
+            if (it == null) return;
+            handleActionForViewModel(it);
+        });
+        mViewModel.getMessageToContext().observe(getViewLifecycleOwner(),it -> {
+            if (it == null) return;
+            handleMessageForViewModel(it);
+        });
+    }
 
-        ViewDataBinding binding = DataBindingUtil.inflate(inflater, dataBindingConfig.getLayout(), container, false);
-        binding.setLifecycleOwner(this);
-        binding.setVariable(dataBindingConfig.getVmVariableId(), dataBindingConfig.getStateViewModel());
-        SparseArray bindingParams = dataBindingConfig.getBindingParams();
-        for (int i = 0, length = bindingParams.size(); i < length; i++) {
-            binding.setVariable(bindingParams.keyAt(i), bindingParams.valueAt(i));
-        }
-        mBinding = binding;
-        return binding.getRoot();
+
+    protected abstract void handleMessageForViewModel(@NonNull MessageEvens<?> it);
+
+    protected abstract void handleActionForViewModel(@NonNull ActionIntentBean it);
+
+    protected abstract void initUI();
+
+    protected void doBeforeBinding(){
+
     }
 
     @Nullable
@@ -149,14 +179,14 @@ public abstract class DataBindingFragment extends Fragment {
 
     protected <T extends ViewModel> T getFragmentViewModel(@NonNull Class<T> modelClass) {
         if (mFragmentProvider == null) {
-            mFragmentProvider = new ViewModelProvider(this,getAppFactory(getActivity()));
+            mFragmentProvider = new ViewModelProvider(this,getAppFactory(mActivity));
         }
         return mFragmentProvider.get(modelClass);
     }
 
     protected <T extends ViewModel> T getActivityViewModel(@NonNull Class<T> modelClass) {
         if (mActivityProvider == null) {
-            mActivityProvider = new ViewModelProvider(mActivity,getAppFactory(getActivity()));
+            mActivityProvider = new ViewModelProvider(mActivity,getAppFactory(mActivity));
         }
         return mActivityProvider.get(modelClass);
     }
@@ -192,4 +222,3 @@ public abstract class DataBindingFragment extends Fragment {
     }
 
 }
-
