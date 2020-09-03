@@ -6,22 +6,23 @@ import com.example.common.viewmodel.RxJavaViewModel;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 /**
- * @author: tao
- * @time: 2020/9/3
- * @e-mail: 1462320178@qq.com
+ * @Author: tao
+ * @ClassName: BaseLoadingFragment
+ * @Time: 2020/9/3 20:46
+ * @E-mail: 1462320178@qq.com
  * @version: 1.0
- * @exception: 无
- * @explain: 说明
+ * @Description: java类作用描述
+ * @Exception: 无
  */
-public abstract class BaseLoadingActivity<VDB extends ViewDataBinding,VM extends RxJavaViewModel>
-        extends BaseDataBingActivity<VDB ,VM>{
+public abstract class BaseLoadingFragment<VDB extends ViewDataBinding , VM extends RxJavaViewModel>
+        extends BaseDataBingFragment<VDB,VM> {
 
     private QMUITipDialog loadDialog;
 
     @Override
     protected void setDefaultObservers() {
         super.setDefaultObservers();
-        mViewModel.loading.observe(this, it->{
+        mViewModel.loading.observe(getViewLifecycleOwner(),it -> {
             if (it!=null && it){
                 showLoadDialog();
             }else {
@@ -32,7 +33,7 @@ public abstract class BaseLoadingActivity<VDB extends ViewDataBinding,VM extends
 
     protected final void showLoadDialog(){
         if (loadDialog == null){
-            loadDialog = new QMUITipDialog.Builder(BaseLoadingActivity.this)
+            loadDialog = new QMUITipDialog.Builder(getContext())
                     .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                     .setTipWord("正在加载")
                     .create();
@@ -47,7 +48,7 @@ public abstract class BaseLoadingActivity<VDB extends ViewDataBinding,VM extends
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         dismissLoadDialog();
     }

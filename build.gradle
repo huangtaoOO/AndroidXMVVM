@@ -51,5 +51,5 @@ ext{
     retrofitVersion = '2.7.0'
     glideVersion = '4.11.0'
     glideAnnotationVersion = '4.9.0'
-    qmuiVersion ='1.2.0'
+    qmuiVersion ='2.0.0-alpha10'
 }

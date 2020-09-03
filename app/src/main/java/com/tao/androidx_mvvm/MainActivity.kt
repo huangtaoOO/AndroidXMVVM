@@ -30,7 +30,8 @@ class MainActivity : BaseLoadingActivity<ActivityMainBinding, ViewModelOfMain>()
     }
 
     override fun handleMessageForViewModel(it: MessageEvens<*>) {
-        TODO("Not yet implemented")
+        TODO("Not yet implemented" +
+                "")
     }
 
     override fun handlerMsg(`object`: Any?) {
