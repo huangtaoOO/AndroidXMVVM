@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.SparseArray;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
@@ -26,7 +24,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.common.BaseApplication;
-import com.example.common.R;
 import com.example.common.bean.ActionIntentBean;
 import com.example.common.bean.MessageEvens;
 import com.example.common.viewmodel.BaseViewModel;
@@ -60,7 +57,6 @@ public abstract class BaseDataBingFragment<VDB extends ViewDataBinding,VM extend
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initViewModel();
     }
 
     /**

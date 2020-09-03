@@ -3,11 +3,8 @@ package com.example.common.view;
 import android.app.Activity;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.SparseArray;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
@@ -19,12 +16,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.common.BaseApplication;
-import com.example.common.R;
 import com.example.common.bean.ActionIntentBean;
 import com.example.common.bean.MessageEvens;
 import com.example.common.viewmodel.BaseViewModel;
-
-import kotlin.jvm.internal.PropertyReference0Impl;
 
 /**
  * @Author: tao
@@ -106,7 +100,6 @@ public abstract class BaseDataBingActivity<VDB extends ViewDataBinding , VM exte
      * 绑定界面
      */
     protected void onBinding(){
-        initViewModel();
         DataBindingConfig dataBindingConfig = getDataBindingConfig();
         VDB binding = DataBindingUtil.setContentView(this, dataBindingConfig.getLayout());
         binding.setLifecycleOwner(this);

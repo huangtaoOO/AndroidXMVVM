@@ -3,7 +3,7 @@ package com.example.common.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.base.BaseApplication;
+import com.example.common.BaseApplication;
 
 /**
  * @author: tao

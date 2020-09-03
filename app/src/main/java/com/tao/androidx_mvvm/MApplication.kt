@@ -1,6 +1,6 @@
 package com.tao.androidx_mvvm
 
-import com.example.base.BaseApplication
+import com.example.common.BaseApplication
 
 /**
  * @author: tao

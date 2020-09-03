@@ -17,7 +17,7 @@ import android.text.TextUtils;
 
 import androidx.core.app.ActivityCompat;
 
-import com.example.base.BaseApplication;
+import com.example.common.BaseApplication;
 
 import java.util.List;
 import java.util.UUID;

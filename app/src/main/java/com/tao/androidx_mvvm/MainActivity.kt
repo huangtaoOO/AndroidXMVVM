@@ -1,35 +1,54 @@
 package com.tao.androidx_mvvm
 
-import com.example.base.activity.BaseMActivity
+import android.view.View
+import com.example.common.bean.ActionIntentBean
+import com.example.common.bean.MessageEvens
+import com.example.common.view.BaseLoadingActivity
+import com.example.common.view.DataBindingConfig
 import com.tao.androidx_mvvm.databinding.ActivityMainBinding
-import com.tao.androidx_mvvm.viewmodel.ViewModelOfMain
+import com.tao.androidx_mvvm.view_model.ViewModelOfMain
 
-class MainActivity : BaseMActivity<ViewModelOfMain, ActivityMainBinding>() {
+class MainActivity : BaseLoadingActivity<ActivityMainBinding, ViewModelOfMain>(),View.OnClickListener {
 
-    /****
-     *
-    INSERT INTO `tb_region`(`code`, `name`, `level`, `remark`, `superior_region_id`, `superior_region_name`, `country`) VALUES (111201, '宋庄镇', 3, NULL, 111200, '通州区', 86);
-     */
-
-    val text1 = "INSERT INTO `tb_region`(`code`, `name`, `level`, `remark`, `superior_region_id`, `superior_region_name`, `country`) VALUES ("
-    val text2 = ", '"
-    val text3 = "', 3, NULL, "
-    val text4 = ", '"
-    val text5 = ", 86);"
-
-    override fun setViewModel(): java.lang.Class<ViewModelOfMain> {
+    override fun initViewModel(): Class<ViewModelOfMain> {
         return ViewModelOfMain::class.java
-    }
-
-    override fun initUI() {
-
-    }
-
-    override fun handlerMsg(`object`: Any?) {
     }
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
+    }
+
+    override fun vmVariableId(): Int {
+        return BR.viewModel
+    }
+
+    override fun getDataBindingConfig(): DataBindingConfig {
+        mViewModel = getActivityViewModel(initViewModel())
+        val config = DataBindingConfig(layoutId,vmVariableId(),mViewModel)
+        config.addBindingParam(BR.click,this)
+        return config
+    }
+
+    override fun handleMessageForViewModel(it: MessageEvens<*>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun handlerMsg(`object`: Any?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun handleActionForViewModel(it: ActionIntentBean) {
+        TODO("Not yet implemented")
+    }
+
+    override fun initUI() {
+        mViewModel.text.value = "MainActivity"
+
+    }
+
+    override fun onClick(v: View?) {
+        showLoadDialog()
+        mBinding.text.postDelayed({ dismissLoadDialog() },1000)
     }
 
 }
