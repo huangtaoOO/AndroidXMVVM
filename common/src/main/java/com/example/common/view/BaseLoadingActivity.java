@@ -1,7 +1,10 @@
 package com.example.common.view;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 
+import com.example.common.bean.ActionIntentBean;
+import com.example.common.bean.MessageEvens;
 import com.example.common.viewmodel.RxJavaViewModel;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
@@ -50,5 +53,20 @@ public abstract class BaseLoadingActivity<VDB extends ViewDataBinding,VM extends
     protected void onDestroy() {
         super.onDestroy();
         dismissLoadDialog();
+    }
+
+    @Override
+    protected void handleActionForViewModel(@NonNull ActionIntentBean it) {
+
+    }
+
+    @Override
+    protected void handleMessageForViewModel(@NonNull MessageEvens<?> it) {
+
+    }
+
+    @Override
+    public void handlerMsg(Object object) {
+
     }
 }
