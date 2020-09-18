@@ -1,3 +1,6 @@
+include ':aidlcommon'
+include ':aidlservice'
+include ':aidlclient'
 include ':common'
 include ':app', ':network'
 include ':base'

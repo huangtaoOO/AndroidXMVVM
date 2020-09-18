@@ -14,6 +14,5 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
-        print(BaseViewModel::class.java.isAssignableFrom(ViewModelOfSQL::class.java));
     }
 }

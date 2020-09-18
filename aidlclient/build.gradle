@@ -1,20 +1,19 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
-
-apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
     defaultConfig {
-        applicationId "com.tao.androidx_mvvm"
+        applicationId "com.example.aidlclient"
         minSdkVersion 25
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,19 +21,18 @@ android {
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
-
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.appcompat:appcompat:$rootProject.appcompatVersion"
     implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintlayoutVersion"
@@ -49,7 +47,7 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$rootProject.runnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
 
-    implementation "com.qmuiteam:qmui:$rootProject.qmuiVersion"
     implementation project(':common')
     implementation project(':aidlcommon')
+
 }

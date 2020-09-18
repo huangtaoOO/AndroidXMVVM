@@ -118,4 +118,8 @@ public abstract class BaseViewModel<M extends BaseModel> extends AndroidViewMode
         }
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+    }
 }

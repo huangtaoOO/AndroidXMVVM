@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">aidlclient</string>
+    <string name="binding">绑定</string>
+    <string name="unbundling">解绑</string>
+</resources>
