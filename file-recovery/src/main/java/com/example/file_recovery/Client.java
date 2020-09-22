@@ -42,19 +42,16 @@ public class Client {
 
     public void run(String[] args) {
         System.out.println("---文件恢复 程序开始执行---");
-
         inputParameter();
-
-
-//        System.out.println("读取配置文件，构建索引");
-//        System.out.println("配置文件目录，xlsxPath = " + xlsxPath);
-//        buildingIndexes();
-//        System.out.println("构建索引成功，获取数据共" + fileIndexes.size() +"条");
-//        System.out.println("---读取丢失文件目录,开始数据恢复---");
-//        dataRecovery();
-//        printErrorFile();
-//        System.out.println("---执行完毕---");
-//        System.out.println("文件重复数：" + numberOfRepetitions);
+        System.out.println("读取配置文件，构建索引");
+        System.out.println("配置文件目录，xlsxPath = " + xlsxPath);
+        buildingIndexes();
+        System.out.println("构建索引成功，获取数据共" + fileIndexes.size() +"条");
+        System.out.println("---读取丢失文件目录,开始数据恢复---");
+        dataRecovery();
+        printErrorFile();
+        System.out.println("---执行完毕---");
+        System.out.println("文件重复数：" + numberOfRepetitions);
     }
 
     private void inputParameter() {
