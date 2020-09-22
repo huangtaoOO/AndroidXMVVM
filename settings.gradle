@@ -1,3 +1,4 @@
+include ':file-recovery'
 include ':aidlcommon'
 include ':aidlservice'
 include ':aidlclient'
