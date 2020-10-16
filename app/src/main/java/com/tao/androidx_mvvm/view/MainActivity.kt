@@ -1,8 +1,10 @@
-package com.tao.androidx_mvvm
+package com.tao.androidx_mvvm.view
 
 import android.view.View
 import com.example.common.view.BaseLoadingActivity
 import com.example.common.view.DataBindingConfig
+import com.tao.androidx_mvvm.BR
+import com.tao.androidx_mvvm.R
 import com.tao.androidx_mvvm.databinding.ActivityMainBinding
 import com.tao.androidx_mvvm.view_model.ViewModelOfMain
 

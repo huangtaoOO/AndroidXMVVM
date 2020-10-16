@@ -1,8 +1,10 @@
 package com.example.file_recovery;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -35,6 +37,45 @@ public class Client {
     private String xlsxPath = "D:\\文件恢复\\丢失文件汇总（不要外传）.xlsx";
 
     private List<String> lossPath = new ArrayList<>();
+    {
+        lossPath.add("D:\\文件恢复\\补录文件10-16");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\北京诚公管理咨询股份有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\北京华麒通信科技有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\北京华麒通信科技有限公司（第二批）");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\丢失文件统计-白城资料部分");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\丢失文件统计-吉林资料部分");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\丢失文件统计-省公司资料部分");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\丢失文件统计-延边资料部分");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\丢失文件统计-长春资料部分");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\吉林吉大通信设计院股份有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\吉林省荣瑞信诚监理有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\吉林长邮通信建设有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\上海邮电设计咨询研究院有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\天元瑞信通信技术股份有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\延边剩余文件");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\长春剩余文件");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\长春现场照片补录文件");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\中国移动通信集团设计院有限公司");
+//        lossPath.add("D:\\文件恢复\\丢失文件补录\\中移建设有限公司");
+    }
+
+    private List<String> heads = new ArrayList<>();
+    {
+        heads.add("项目名称");
+        heads.add("子项名称");
+        heads.add("子项编号");
+        heads.add("任务ID");
+        heads.add("任务名称");
+        heads.add("检查项名称");
+        heads.add("提交公司");
+        heads.add("提交部门");
+        heads.add("提交人");
+        heads.add("手机号");
+        heads.add("提交时间");
+        heads.add("文件名称");
+        heads.add("文件大小");
+        heads.add("文件位置");
+    }
 
     private String transferPath = "D:\\文件恢复\\";
 
@@ -42,7 +83,7 @@ public class Client {
 
     public void run(String[] args) {
         System.out.println("---文件恢复 程序开始执行---");
-        inputParameter();
+//        inputParameter();
         System.out.println("读取配置文件，构建索引");
         System.out.println("配置文件目录，xlsxPath = " + xlsxPath);
         buildingIndexes();
@@ -52,6 +93,118 @@ public class Client {
         printErrorFile();
         System.out.println("---执行完毕---");
         System.out.println("文件重复数：" + numberOfRepetitions);
+        System.out.println("--输出错误文件--");
+        printErrorLog();
+        System.out.println("--输出错误文件成功--");
+    }
+
+    private void printErrorLog() {
+        createExcelFile();
+    }
+
+    public boolean createExcelFile() {
+        boolean isCreateSuccess = false;
+        Workbook workbook = null;
+        try {
+            workbook = new XSSFWorkbook();//HSSFWorkbook();//WorkbookFactory.create(inputStream);
+        }catch(Exception e) {
+            System.out.println("It cause Error on CREATING excel workbook: ");
+            e.printStackTrace();
+        }
+        if(workbook != null) {
+            Sheet sheet = workbook.createSheet("错误日志");
+            Row row0 = sheet.createRow(0);
+            for(int i = 0; i < heads.size(); i++) {
+                Cell cell_1 = row0.createCell(i, Cell.CELL_TYPE_STRING);
+                CellStyle style = getStyle(workbook);
+                cell_1.setCellStyle(style);
+                cell_1.setCellValue( heads.get(i));
+                sheet.autoSizeColumn(i);
+            }
+            int rowNum = 1;
+            for (PmgFileBean bean : fileIndexes) {
+                if (!bean.isRecovered()){
+                    Row row = sheet.createRow(rowNum);
+                    for(int i = 0; i < heads.size(); i++) {
+                        Cell cell = row.createCell(i, Cell.CELL_TYPE_STRING);
+                        switch (i){
+                        case 0:
+                            cell.setCellValue(bean.getProjectName());
+                            break;
+                        case 1:
+                            cell.setCellValue(bean.getSubName());
+                            break;
+                        case 2:
+                            cell.setCellValue(bean.getSubCode());
+                            break;
+                        case 3:
+                            cell.setCellValue(bean.getTaskId());
+                            break;
+                        case 4:
+                            cell.setCellValue(bean.getTaskName());
+                            break;
+                        case 5:
+                            cell.setCellValue(bean.getCheckName());
+                            break;
+                        case 6:
+                            cell.setCellValue(bean.getCompany());
+                            break;
+                        case 7:
+                            cell.setCellValue(bean.getDepartment());
+                            break;
+                        case 8:
+                            cell.setCellValue(bean.getUser());
+                            break;
+                        case 9:
+                            cell.setCellValue(bean.getPhone());
+                            break;
+                        case 10:
+                            cell.setCellValue(bean.getTime());
+                            break;
+
+                        case 11:
+                            cell.setCellValue(bean.getFileName());
+                            break;
+                        case 12:
+                            cell.setCellValue(bean.getFileSize());
+                            break;
+                        case 13:
+                            cell.setCellValue(bean.getRealLocation());
+                            break;
+                        default:break;
+                        }
+                    }
+                    rowNum++;
+                }
+            }
+            try {
+                String filePath = transferPath + "错误日志.xlsx";
+                File file = new File(filePath);
+                if (!file.exists())
+                    file.createNewFile();
+                FileOutputStream outputStream = new FileOutputStream(file);
+                workbook.write(outputStream);
+                outputStream.flush();
+                outputStream.close();
+                isCreateSuccess = true;
+            } catch (Exception e) {
+                System.out.println("It cause Error on WRITTING excel workbook: ");
+                e.printStackTrace();
+            }
+        }
+        return isCreateSuccess;
+    }
+
+    private CellStyle getStyle(Workbook workbook){
+        CellStyle style = workbook.createCellStyle();
+        // 设置单元格字体
+        Font headerFont = workbook.createFont(); // 字体
+        headerFont.setFontHeightInPoints((short)14);
+        headerFont.setColor(HSSFColor.RED.index);
+        headerFont.setFontName("宋体");
+        style.setFont(headerFont);
+        style.setWrapText(true);
+        return style;
     }
 
     private void inputParameter() {
@@ -79,16 +232,20 @@ public class Client {
 
     private void printErrorFile() {
         System.out.println("---未搜索到文件---");
-        for (FileBean bean : notFindFailedFiles){
-            System.out.println(bean.path);
+        if (notFindFailedFiles!=null){
+            for (FileBean bean : notFindFailedFiles){
+                System.out.println(bean.path);
+            }
         }
-        System.out.println("未搜索到文件 - - 执行出错共:" + notFindFailedFiles.size() + "个");
+        System.out.println("未搜索到文件 - - 执行出错共:" + (notFindFailedFiles==null?0:notFindFailedFiles.size()) + "个");
 
         System.out.println("---重复文件出错---");
-        for (FileBean bean : repeatFailedFiles){
-            System.out.println(bean.path);
+        if (repeatFailedFiles!=null){
+            for (FileBean bean : repeatFailedFiles){
+                System.out.println(bean.path);
+            }
         }
-        System.out.println("重复文件出错 - - 执行出错共:" + repeatFailedFiles.size() + "个");
+        System.out.println("重复文件出错 - - 执行出错共:" + (repeatFailedFiles==null?0:repeatFailedFiles.size()) + "个");
     }
 
     private void dataRecovery() {
@@ -141,7 +298,7 @@ public class Client {
         String a [] = pmg.getRealLocation().split("\\\\");
         String catalog = transferPath + pmg.getRealLocation().replace(a[a.length-1],"");
         copyFile(new File(bean.path),catalog,a[a.length-1]);
-        System.out.println(" 原路径：" + bean.path + " 复制路径：" + catalog + a[a.length-1]);
+        pmg.setRecovered(true);
     }
 
     public void copyFile(File source, String catalog,String dest )throws IOException {
@@ -245,15 +402,45 @@ public class Client {
                                 fileBean.setSubCode(cellData);
                                 break;
                             case 3:
-                                fileBean.setTaskId(0L);
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setTaskId(cellData);
                                 break;
                             case 4:
                                 cellData = (String) getCellFormatValue(row.getCell(j));
                                 fileBean.setTaskName(cellData);
                                 break;
+                            case 5:
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setCheckName(cellData);
+                                break;
+                            case 6:
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setCompany(cellData);
+                                break;
+                            case 7:
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setDepartment(cellData);
+                                break;
+                            case 8:
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setUser(cellData);
+                                break;
+                            case 9:
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setPhone(cellData);
+                                break;
+                            case 10:
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setTime(cellData);
+                                break;
+
                             case 11:
                                 cellData = (String) getCellFormatValue(row.getCell(j));
                                 fileBean.setFileName(cellData);
+                                break;
+                            case 12:
+                                cellData = (String) getCellFormatValue(row.getCell(j));
+                                fileBean.setFileSize(cellData);
                                 break;
                             case 13:
                                 cellData = (String) getCellFormatValue(row.getCell(j));
@@ -301,26 +488,13 @@ public class Client {
         Object cellValue;
         if(cell!=null){
             //判断cell类型
-            switch(cell.getCellType()){
-                case Cell.CELL_TYPE_NUMERIC:{
-                    cellValue = String.valueOf(cell.getNumericCellValue());
+            switch(cell.getCellTypeEnum()){
+                case NUMERIC:
+                    cellValue = String.valueOf((long)cell.getNumericCellValue());
                     break;
-                }
-                case Cell.CELL_TYPE_FORMULA:{
-                    //判断cell是否为日期格式
-                    if(DateUtil.isCellDateFormatted(cell)){
-                        //转换为日期格式YYYY-mm-dd
-                        cellValue = cell.getDateCellValue();
-                    }else{
-                        //数字
-                        cellValue = String.valueOf(cell.getNumericCellValue());
-                    }
-                    break;
-                }
-                case Cell.CELL_TYPE_STRING:{
+                case STRING:
                     cellValue = cell.getRichStringCellValue().getString();
                     break;
-                }
                 default:
                     cellValue = "";
             }

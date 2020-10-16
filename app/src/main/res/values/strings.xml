@@ -3,4 +3,6 @@
     <!--启动页-->
     <string name="first_jump">跳过广告：%1$s</string>
     <string name="first_startup">这就是启动页</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

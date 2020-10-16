@@ -97,7 +97,11 @@ public abstract class RxJavaViewModel extends BaseViewModel implements NetworkSt
     @Override
     protected void onCleared() {
         super.onCleared();
-        mDisposableMap.clear();
-        mCompositeDisposable.dispose();
+        if (mDisposableMap!=null){
+            mDisposableMap.clear();
+        }
+        if (mCompositeDisposable!=null){
+            mCompositeDisposable.dispose();
+        }
     }
 }

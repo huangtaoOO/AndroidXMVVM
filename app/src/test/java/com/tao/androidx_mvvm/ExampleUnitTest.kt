@@ -1,7 +1,5 @@
 package com.tao.androidx_mvvm
 
-import com.tao.androidx_mvvm.basis.viewmodel.BaseViewModel
-import com.tao.androidx_mvvm.viewmodel.ViewModelOfSQL
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -14,5 +12,20 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+        Thread(Runnable {
+            println(Thread.currentThread().name + " 1")
+            Thread(Runnable {
+                println(Thread.currentThread().name + " 2")
+                Thread(Runnable {
+                    println(Thread.currentThread().name + " 3")
+                    Thread(Runnable {
+                        println(Thread.currentThread().name + " 4")
+                        Thread(Runnable {
+                            println(Thread.currentThread().name + " 5")
+                        }).start()
+                    }).start()
+                }).start()
+            }).start()
+        }).start()
     }
 }
