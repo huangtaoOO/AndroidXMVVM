@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.common.bean.ActionIntentBean;
 import com.example.common.bean.MessageEvens;
@@ -114,6 +115,7 @@ public class LoginFragment extends BaseLoadingFragment<FragmentLoginBinding, Vie
                 .setMessage("请前往设置->应用->PermissionDemo->权限中打开相关权限，否则功能无法正常运行！")
                 .setPositiveButton("确定", (dialog, which) -> {
                     // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
+                    Navigation.findNavController(mBinding.getRoot()).navigate(R.id.action_launchFragment_to_loginFragment);
                 }).show();
     }
 
