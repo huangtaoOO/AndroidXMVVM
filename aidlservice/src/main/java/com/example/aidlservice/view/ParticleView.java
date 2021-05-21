@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -42,8 +41,9 @@ public class ParticleView extends View {
     //随机生成器
     private Random random = new Random();
 
+    private int radius = 1;
     //粒子总数
-    private final int PARTICLE_SIZE = 300;
+    private final int PARTICLE_SIZE = 1000;
     //粒子
     private List<Particle> particleList = new ArrayList<>(PARTICLE_SIZE);
     //动画
@@ -91,25 +91,16 @@ public class ParticleView extends View {
 
     private void updateParticle(Float animatedValue) {
         for (Particle it : particleList){
-//            if (it.getY() - centerY > it.getMaxOffSet()){
-//                it.setY(random.nextInt((int) it.getMaxOffSet())+centerY);
-//                it.setX(random.nextInt((int) viewWidth));
-//                it.setSpeed(random.nextInt(15)+5);
-//                it.setAlpha(random.nextInt(256));
-//            }
-//            it.setY(it.getY()+it.getSpeed());
-
-
             if(it.getOffSet() >it.getMaxOffSet()){
                 it.setOffSet(0);
                 it.setSpeed(random.nextInt(5)+1);
             }
             it.setAlpha(random.nextInt(256));
-            it.setX(centerX + (float) Math.cos(it.getAngle())*(280f + it.getOffSet()));
+            it.setX(centerX + (float) Math.cos(it.getAngle())*(radius + it.getOffSet()));
             if (it.getY() > centerY){
-                it.setY((float) Math.sin(it.getAngle())*(280F + it.getOffSet()) + centerY);
+                it.setY((float) Math.sin(it.getAngle())*(radius + it.getOffSet()) + centerY);
             }else {
-                it.setY((float) (centerY - Math.sin(it.getAngle() )* (280+it.getOffSet())));
+                it.setY((float) (centerY - Math.sin(it.getAngle() )* (radius+it.getOffSet())));
             }
             it.setOffSet(it.getSpeed() + it.getOffSet());
         }
@@ -122,30 +113,23 @@ public class ParticleView extends View {
         viewWidth = w;
         centerX = (float)(w/2);
         centerY = (float)(h/2);
-        Log.i("onSizeChanged","viewHeight = " + viewHeight);
-        Log.i("onSizeChanged","viewWidth = " + viewWidth);
-        Log.i("onSizeChanged","centerX = " + centerX);
-        Log.i("onSizeChanged","centerY = " + centerY);
 
-        path.addCircle(centerX,centerY,280F,Path.Direction.CCW);
+        path.addCircle(centerX,centerY,radius,Path.Direction.CCW);
         pathMeasure.setPath(path,false);
         float nextX = 0f;
         float nextY = 0f;
         Particle p;
+        particleList.clear();
         for (int i = 0 ; i < PARTICLE_SIZE; i ++ ){
             pathMeasure.getPosTan(i / (float)PARTICLE_SIZE * pathMeasure.getLength(), pos, tan);
             nextX = pos[0]+random.nextInt(6) - 3f; //X值随机偏移
             nextY=  pos[1]+random.nextInt(6) - 3f;//Y值随机偏移
-            //angle=acos(((pos[0] - centerX) / 280f).toDouble())
             p = new Particle(nextX,nextY,random.nextInt(5));
             p.setSpeed(random.nextInt(5)+1);
             p.setAlpha(random.nextInt(256));
-            p.setAngle(Math.acos(((pos[0] - centerX) / 280f)));
+            p.setAngle(Math.acos(((pos[0] - centerX) / radius)));
+            p.setColour(getColor());
 
-//            p = new Particle(random.nextInt((int)viewWidth),centerY,random.nextInt(5));
-//            p.setY(random.nextInt((int) p.getMaxOffSet())+centerY);
-//            p.setSpeed(random.nextInt(15)+5);
-//            p.setAlpha(random.nextInt(256));
             particleList.add(p);
         }
         animator.start();
@@ -156,10 +140,41 @@ public class ParticleView extends View {
         super.onDraw(canvas);
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
+        //canvas.drawPath(path,paint);
         for (Particle particle : particleList){
             paint.setAlpha(particle.getAlpha());
+            paint.setColor(particle.getColour());
             canvas.drawCircle(particle.getX(), particle.getY(), particle.getRadius(), paint);
-            Log.e("onDraw",particle.toString());
+        }
+    }
+
+    private int getColor(){
+        int i = random.nextInt(11);
+        switch (i) {
+            case 0:
+                return Color.BLACK;
+            case 1:
+                return Color.DKGRAY;
+            case 2:
+                return Color.GRAY;
+            case 3:
+                return Color.LTGRAY;
+            case 4:
+                return Color.WHITE;
+            case 5:
+                return Color.RED;
+            case 6:
+                return Color.GREEN;
+            case 7:
+                return Color.BLUE;
+            case 8:
+                return Color.YELLOW;
+            case 9:
+                return Color.CYAN;
+            case 10:
+                return Color.MAGENTA;
+            default:
+                return Color.WHITE;
         }
     }
 }

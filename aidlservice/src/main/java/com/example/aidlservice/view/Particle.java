@@ -28,9 +28,11 @@ public class Particle {
     //角度
     private double angle;
     //最大移动距离
-    private float maxOffSet = 300F;
+    private float maxOffSet = 500F;
     //透明度
     private int alpha ;
+
+    private int colour;
 
     public Particle(float x, float y, float radius) {
         this.x = x;
@@ -137,6 +139,14 @@ public class Particle {
 
     public void setOffSet(float offSet) {
         this.offSet = offSet;
+    }
+
+    public int getColour() {
+        return colour;
+    }
+
+    public void setColour(int colour) {
+        this.colour = colour;
     }
 
     @Override

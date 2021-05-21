@@ -1,9 +1,14 @@
 package com.tao.androidx_mvvm.view;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.common.bean.ActionIntentBean;
@@ -15,6 +20,8 @@ import com.tao.androidx_mvvm.R;
 import com.tao.androidx_mvvm.databinding.FragmentLoginBinding;
 import com.tao.androidx_mvvm.view_model.ViewModelOfLoginFragment;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link LoginFragment#newInstance} factory method to
@@ -23,10 +30,11 @@ import com.tao.androidx_mvvm.view_model.ViewModelOfLoginFragment;
 public class LoginFragment extends BaseLoadingFragment<FragmentLoginBinding, ViewModelOfLoginFragment>
         implements View.OnClickListener  {
 
+    private static final int SMS_PERMISSION = 0xA;
+
     public LoginFragment() {
         // Required empty public constructor
     }
-
 
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
@@ -71,11 +79,42 @@ public class LoginFragment extends BaseLoadingFragment<FragmentLoginBinding, Vie
 
     @Override
     protected void initUI() {
-
+        requestPermission();
     }
 
     @Override
     public void onClick(View v) {
 
     }
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_SMS},
+                    SMS_PERMISSION);
+        }else {
+            mViewModel.init();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        if (requestCode == SMS_PERMISSION) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mViewModel.init();
+            } else {
+                showWaringDialog();
+            }
+        }
+    }
+
+    private void showWaringDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("警告！")
+                .setMessage("请前往设置->应用->PermissionDemo->权限中打开相关权限，否则功能无法正常运行！")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
+                }).show();
+    }
+
 }
